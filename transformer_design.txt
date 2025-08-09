@@ -1,0 +1,58 @@
+Decoder-Only Transformer (GPT-Style) — Final Spec
+-------------------------------------------------
+Context length (block size):  512 tokens
+d_model:                      512
+n_layers:                     8
+n_heads:                      8  → d_head = 64
+vocab_size:                   50,000
+Precision:                    bf16 (preferred) or fp16 + GradScaler
+Hardware target:              RTX 3060 (6 GB VRAM)
+
+Pipeline
+--------
+1. Input Tokens (shifted right during training)
+   - Causal mask applied to prevent seeing future tokens
+
+2. Token Embedding Layer (E)  [shape: V × d_model]
+   - Learnable matrix mapping token IDs → dense vectors
+   - Dropout (≈ 0.1) if needed
+   - **Tied** to LM Head weights (E ≡ Wᵀ)
+
+3. Repeat N = 8 Transformer Blocks (Pre-Norm)
+   For each block:
+
+   a) RMSNorm(x)                          # ε ≈ 1e-5
+   b) Masked Multi-Head Self-Attention
+      - Projections: Q, K, V (bias=False)
+      - Reshape to [B, T, H, d_head]
+      - **RoPE** applied to Q,K
+      - Attention kernel: **FlashAttention v2** (fallback to SDPA)
+      - Dropout: attn_drop ∈ [0.0, 0.1]
+   c) Residual Add
+
+   d) RMSNorm(x)
+   e) MLP (SwiGLU activation)
+      - Hidden size: ≈ 2.7 × d_model (→ 1408, rounded for tensor cores)
+      - Two linear layers, bias=False
+      - Dropout: mlp_drop ∈ [0.0, 0.1]
+   f) Residual Add
+
+4. Final RMSNorm
+
+5. LM Head (Linear projection) [shape: d_model × V]
+   - Uses **tied** weights from embedding layer (Eᵀ)
+
+6. Softmax (training only)
+   - Produces next-token probability distribution
+
+Key Notes
+---------
+- Pre-Norm: Norm before sublayer → better stability for deep stacks
+- RMSNorm: Cheaper & stabler than LayerNorm
+- SwiGLU: Better convergence/perplexity than GELU/Relu at similar cost
+- RoPE(Q,K): Relative position info with better generalization
+- FlashAttention v2: Exact attention, reduced VRAM, higher throughput
+- Weight tying: Saves parameters, improves performance
+- Gradient checkpointing: ON to fit larger batches in 6 GB
+- Init: Scaled residual (optional) for extra depth stability
+- Bias-free projections: Matches modern LLaMA-style efficiency

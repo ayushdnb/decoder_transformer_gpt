@@ -1,0 +1,13 @@
+vocab_size: 50000
+block_size: 512
+tokenizer_path: C:\Kishan\training_data\tokenizer\tokenizer_exp.model
+special_token_ids: {'#chapter_start': 4, '#dialogue': 5, '#poem': 6, '#story_within': 7}
+dtype: uint16
+created_utc: 2025-07-30T06:10:52.202930
+train_bytes: 2952790016
+train_chars: 2940892026
+train_tokens: 856341217
+val_bytes: 268435456
+val_chars: 266911873
+val_tokens: 78832917
+compression_ratio: 1.72

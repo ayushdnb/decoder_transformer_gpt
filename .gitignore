@@ -1,0 +1,49 @@
+# ============================================
+# Python cache / bytecode
+# ============================================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# ============================================
+# Virtual environments
+# ============================================
+.venv/
+venv/
+env/
+
+# ============================================
+# Data files (large or generated)
+# ============================================
+data/*.bin
+data/*.csv
+!data/meta.txt   # Keep small metadata file
+*.vocab
+*.model
+
+# ============================================
+# Tokenizer experiment outputs
+# ============================================
+tokenizer/*.model
+tokenizer/*.vocab
+tokenizer/*_log.txt
+
+# ============================================
+# Logs & checkpoints
+# ============================================
+*.log
+train/runs/
+checkpoints/
+*.ckpt
+
+# ============================================
+# Jupyter Notebook checkpoints
+# ============================================
+.ipynb_checkpoints/
+
+# ============================================
+# OS-specific junk
+# ============================================
+.DS_Store
+Thumbs.db

@@ -1,0 +1,7 @@
+prompt,tokens_total,tokens_generated,ppl_generated,avg_entropy_bits,distinct1,distinct2,distinct3,max_trigram_freq,repeat_ratio,ends_sentence
+"In a forgotten valley,",85,80,14.157,6.844,0.588,0.937,1.0,1,0.0,False
+"In a forgotten valley,",85,80,11.939,5.868,0.625,0.924,0.987,2,0.013,False
+The old man whispered:,85,80,5.329,3.896,0.588,0.911,0.974,2,0.026,False
+The old man whispered:,85,80,4.407,3.426,0.5,0.899,0.974,2,0.026,False
+She opened the letter and discovered,86,80,9.077,5.224,0.613,0.911,0.974,2,0.026,False
+She opened the letter and discovered,86,80,7.481,5.107,0.525,0.873,0.987,2,0.013,False
