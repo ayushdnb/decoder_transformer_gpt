@@ -1,4 +1,3 @@
-# activations.py
 # SwiGLU activation: Linear(d -> 2d), then split: (a, b); act = SiLU(a) * b
 import torch
 import torch.nn as nn
